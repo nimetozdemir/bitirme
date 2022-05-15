@@ -1,0 +1,127 @@
+{%extends "menu.html"%}
+
+{%block header%}
+Öğrenci Kayıt Formu
+
+{%endblock%}
+
+{%block body%}
+{% from "includes/formhelper.html" import render_field %}
+       
+
+<form method=post action="/" name="form" enctype = "multipart/form-data" onsubmit="return validateForm()" >
+  <section class="section is-main-section">
+    <div class="notification is-info">
+      <div class="level">
+        <div class="level-item">
+          <div>
+            <div>
+            <div class="field is-narrow">
+              <div class="control">
+              <h6>1.Fotograf:</h6>
+              <input class="input"type = "file" name = "file_on" />
+             
+            </div>
+            <div class="field">
+              <div class="control">
+                <h6>İsim Soyisim Giriniz:</h6>
+                
+                <input class="input" type="text" name="isim_soyisim" placeholder="İsim Soyisim Giriniz.">
+              </div>
+              <div class="control">
+                <h6>Okul Numarası Giriniz:</h6>
+                
+                <input class="input" type="text" name="okul_no" placeholder="Okul Numarası Giriniz">        
+              </div>
+              <div class="control">
+                <div class="select is-fullwidth">
+                  <h6>Dersi Seçiniz:</h6>
+                  <select name="saat_start" id="saat_start" class="minimal">
+                    
+                    {% for item in dersler %}
+                      <option value={{item}}>{{item}}</option>
+                      {% endfor %}
+                      <!-- <option>elektrik-elektronik mühendisliği</option>
+                      <option>endüstri mühendisliği</option>
+                      <option>kimya mühendisliği</option>
+                      <option>Makina mühendisliği</option> -->
+                  </select>
+                </div>          
+              </div>
+            </br>
+            <div class="control">
+            </br> 
+            <button type="submit" name="button" id="kaydet" class="button is-primary" value="kaydet">Kaydet</button>
+          </div>
+        </br>
+           
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+</div>
+
+</section>
+<header class="card-header">
+<p class="card-header-title">
+<span class="icon"><i class="mdi mdi-ballot"></i></span>
+{{rapor_return}}  
+</p>
+<script>
+
+// Elements for taking the snapshot
+var video = document.getElementById('video');
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+
+// Get access to the camera!
+if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+// Not adding `{ audio: true }` since we only want video now
+navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+//video.src = window.URL.createObjectURL(stream);
+video.srcObject = stream;
+video.play();
+});
+}
+
+// Trigger photo take
+document.getElementById("send").addEventListener("click", function() {
+context.drawImage(video, 0, 0, 640, 480); // copy frame from <video>
+canvas.toBlob(upload, "image/jpeg");  // convert to file and execute function `upload`
+});
+document.getElementById("arka").addEventListener("click", function() {
+context.drawImage(video, 0, 0, 640, 480); // copy frame from <video>
+canvas.toBlob(upload, "image/jpeg");  // convert to file and execute function `upload`
+});
+
+function upload(file) {
+// create form and append file
+var formdata =  new FormData();
+formdata.append("snap", file);
+
+// create AJAX requests POST with file
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "{{ url_for('index') }}", true);
+xhr.onload = function() {
+if(this.status = 200) {
+console.log(this.response);
+} else {
+console.error(xhr);
+}
+alert(this.response);
+};
+xhr.send(formdata);
+}
+
+</script>
+</header>
+
+
+</form>
+{%endblock%}

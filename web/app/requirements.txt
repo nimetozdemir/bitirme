@@ -1,0 +1,10 @@
+mysql-connector-python
+secure-smtplib
+weasyprint
+Flask
+pandas
+BeautifulSoup4
+requests
+
+
+

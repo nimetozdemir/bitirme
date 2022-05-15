@@ -1,0 +1,99 @@
+{%extends "menu.html"%}
+
+{%block header%}
+Ders Ekle 
+{%endblock%}
+
+{%block body%}
+
+<form method=post action="/dersekle" name="form" enctype = "multipart/form-data" onsubmit="return validateForm()" >
+  <section class="section is-main-section">
+    <div class="notification is-info">
+      <div class="level">
+        <div class="level-item">
+          <div>
+            <div>
+            <div class="field is-narrow">
+              <div class="control">
+              <label for="personel">Gün:</label>
+              <select name="gun" id='gun'>
+                  <option>Pazartesi</option>
+                  <option>Salı</option> 
+                  <option>Çarşamba</option>
+                  <option>Perşembe</option> 
+                  <option>Cuma</option>
+              </select>
+              <label for="personel">Ders Baslangıc:</label>
+             
+                <select name="saat_start" id="saat_start" class="minimal">
+                  <option selected>00:01</option>
+  
+                  {% for i in range (1,23) %}
+                    {%if i < 10 %}
+                      <option value={{i}}:00>0{{i}}:00</option>
+                    {% else %}
+                     <option value={{i}}:00>{{i}}:00</option>
+                    {%endif%}
+
+
+                  {%endfor%}
+                 
+                  </select>
+             
+                <label for="personel">Ders Bitis:</label>
+             
+                <select name="saat_finish" id="saat_finish" class="minimal">
+                  <option selected>23:59</option>
+  
+                  {% for i in range (1,23) %}
+                  {%if i < 10 %}
+                    <option value={{i}}:00>0{{i}}:00</option>
+                  {% else %}
+                   <option value={{i}}:00>{{i}}:00</option>
+                  {%endif%}
+
+
+                {%endfor%}
+                 
+                  </select>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                
+              </div>
+              <div class="control">
+                
+              </div>
+              <div class="field">
+                <div class="control">
+                  
+                  <input class="input" type="text" name="ders_adi" placeholder="Ders Adı">
+                  
+                </div>
+               
+               
+            </br>
+            <div class="control">
+            </br> 
+            <button type="submit" name="button" id="kaydet" class="button is-primary" value="kaydet">Kaydet</button>
+          </div>
+        </br>
+           
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+</div>
+
+</section>
+<header class="card-header">
+<p class="card-header-title">
+<span class="icon"><i class="mdi mdi-ballot"></i></span>
+{%endblock%} 

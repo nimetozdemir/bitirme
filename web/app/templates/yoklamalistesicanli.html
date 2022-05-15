@@ -1,0 +1,64 @@
+{%extends "menu.html"%}
+
+{%block header%}
+Giriş Listesi
+
+{%endblock%}
+
+{%block body%}
+<section class="section is-main-section">
+  <div class="notification is-info">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">   
+          <div>
+            <div>
+              <form method="POST" action="/yoklamalistesicanli" name="form" onsubmit="return validateForm()">
+                  <label for="date1">Tarih  :</label>
+                  <input  name="date1" class="input" required type="date" value="{{date1}}" required >
+            
+          </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" name="button" class="button is-primary" value="value">GÖRÜNTÜLE</button>
+    </div>
+    
+  </div>
+  </section>
+  <section class="section is-main-section">
+ 
+  <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-ballot"></i></span>
+        Kayıt Tablosu   {{toplam_kayit}}
+      </p>
+      
+    </header>
+    <div class="card-content">
+      <div class="b-table has-pagination">
+        <div class="table-wrapper has-mobile-cards">
+          <table id="data" class="table is-fullwidth is-striped is-hoverable is-fullwidth">
+            <tr>
+            <th>İsim Soyisim</th>
+            <th>Time</th>
+          </tr>
+                
+             <tbody id="myTable">
+                {% for i in range (name | length) %}
+                <tr>
+                   <td>{{name[i]}}</td>
+                   <td>{{time[i]}}</td>
+                </tr>
+               {%endfor%}
+           </tbody> 
+
+          </table>
+        </div>
+        
+      </div>
+    </div>
+    
+</section>
+{%endblock%}
