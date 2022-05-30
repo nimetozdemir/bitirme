@@ -125,17 +125,17 @@ def yoklamalistesicanli():
         ders=request.form.get("ders")
         print(date,ders)
 
-        bas = pd.read_csv("./app/static/"+str(date)+"/kisiler.csv",index_col=0)
+        bas = pd.read_csv("./app/static/"+str(date)+"/tum_kisiler.csv",index_col=0)
         print(bas)
         # bas.rename({"name": "name_surname", "okul_no": "okul_no","ders": "ders","time": "time"}, axis='columns', inplace =True)
         # bas.drop('Unnamed: 0', axis=1, inplace=True)
         # bas.drop('Unnamed: 0', axis=1, inplace=True)
         print(bas)
         name=bas['name']
-        okul_numarasi=bas['okul_numarasi']
-        ders_adi=bas['ders_adi']
+        # okul_numarasi=bas['okul_numarasi']
+        # ders_adi=bas['ders_adi']
         time=bas['time']
-        return render_template("yoklamalistesicanli.html",dersler=dersler,bas=bas,name=name,okul_numarasi=okul_numarasi,ders_adi=ders_adi,time=time) 
+        return render_template("yoklamalistesicanli.html",dersler=dersler,bas=bas,name=name,time=time) 
 
     # data = pd.read_csv(mkdir_folder_str)
     return render_template("yoklamalistesicanli.html",dersler=dersler) 
@@ -144,7 +144,7 @@ def yoklamalistesicanli():
 
 
 def gen_frames():  
-    camera=cv2.VideoCapture('nimet.mp4')
+    camera=cv2.VideoCapture('nimet2.mp4')
     while True:
         success, frame = camera.read()  # read the camera frame
         if not success:
@@ -270,9 +270,10 @@ def logout():
 
 dizi=[[0,0,0,0]]
 ogrenciler=pd.DataFrame(dizi,columns=['id','time','name','ders_adi'])
+tum_kisile=pd.DataFrame(dizi,columns=['id','time','name','ders_adi'])
 @app.route('/api/file', methods=['POST'])
 def program_start():
-    global ogrenciler
+    global ogrenciler,tum_kisile
     mkdir_folder=str(datetime.datetime.now())
     mkdir_folder_str=(mkdir_folder[:10]).strip()
     try:
@@ -287,4 +288,10 @@ def program_start():
     ogrenciler=ogrenciler.drop_duplicates(subset=['name'])
     print(ogrenciler)
     ogrenciler.to_csv(path_bas+"/"+str(json['ders_adi'])+".csv")
+
+    tum_kisile=tum_kisile.append(json,ignore_index=True)
+    tum_kisile=tum_kisile.drop_duplicates(subset=['name'])
+    # print(ogrenciler)
+    ogrenciler.to_csv(path_bas+"/"+'tum_kisiler'+".csv")
+
     return 'True'

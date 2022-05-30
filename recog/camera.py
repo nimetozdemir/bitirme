@@ -144,10 +144,13 @@ people_count=[]
 if __name__ == '__main__':
     encoder_model = 'data/model/facenet_keras.h5'
     encodings_path = 'data/encodings/encodings.pkl'
+    # print(encoder_model)
+    # print(os.listdir('data/model/facenet_keras.h5'))
     face_detector = mtcnn.MTCNN()
     face_encoder = load_model(encoder_model)
     encoding_dict = load_pickle(encodings_path)
-    people_dir = 'data/people'
+    people_dir = './data/people'
+    
     vc = cv2.VideoCapture(0)
     # fps = int(vc.get(cv2.CAP_PROP_FPS))
     # width = int(vc.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -196,34 +199,34 @@ if __name__ == '__main__':
             print('---')
             print(stime >= baslangic)
 
-            if stime >= baslangic and bitis >= stime:    
+            # if stime >= baslangic and bitis >= stime:    
             # if(stime)==x[2]:
-                mycursor=conn()
-                mycursor = mydb.cursor(dictionary=True)
-                mycursor.execute("SELECT * FROM "+str(x[1]))
-                ogrenciler = mycursor.fetchall()
-                                
-                # if stime != x[3]:
-                # print(json.dumps(sinif, ensure_ascii=False))
-                # if stime != x[3]:
-                # test=[]
+            mycursor=conn()
+            mycursor = mydb.cursor(dictionary=True)
+            mycursor.execute("SELECT * FROM "+str(x[1]))
+            ogrenciler = mycursor.fetchall()
+                            
+            # if stime != x[3]:
+            # print(json.dumps(sinif, ensure_ascii=False))
+            # if stime != x[3]:
+            # test=[]
 
-                for ogrenci in ogrenciler:
-                    sinif.append(str(ogrenci['name_surname']).lower())
+            for ogrenci in ogrenciler:
+                sinif.append(str(ogrenci['name_surname']).lower())
+                
+                for c in sinif:
+                    # print(c)
+                    if not c in people:
+                        if len(c) > 1:
+                            try:
+                                path_bas=people_dir+"/"+str(c)
+                                os.mkdir(path_bas)
+                                imgURL = "http://localhost:5000/"+ogrenci['image']
+                                urllib.request.urlretrieve(imgURL,people_dir+"/"+str(c)+"/"+"1.jpg")
+                                sayac+=1
+                            except Exception as e:
+                                pass
                     
-                    for c in sinif:
-                        # print(c)
-                        if not c in people:
-                            if len(c) > 1:
-                                try:
-                                    path_bas=people_dir+"/"+str(c)
-                                    os.mkdir(path_bas)
-                                    imgURL = "http://localhost:5000/"+ogrenci['image']
-                                    urllib.request.urlretrieve(imgURL,people_dir+"/"+str(c)+"/"+"1.jpg")
-                                    sayac+=1
-                                except Exception as e:
-                                    pass
-                        
         print(sayac)
         if sayac==1:
             value=train(encoder_model,encodings_path,people_dir,l2_normalizer,face_detector,face_encoder)
@@ -239,8 +242,8 @@ if __name__ == '__main__':
         
         
         
-        p.stdin.write(frame.tobytes())
-        # cv2.imshow('camera', frame)
+        # p.stdin.write(frame.tobytes())
+        cv2.imshow('camera', frame)
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
